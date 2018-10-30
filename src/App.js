@@ -1,28 +1,47 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import ResidentProfile from "./residentProfile";
 
 class App extends Component {
-
-  constructor(){
+  constructor() {
     super();
     this.state = {
-      name: 'Dan',
-      level: 0
-    }
+      residents: [
+        {
+          id: 0,
+          name: "Dan",
+          level: 0
+        },
+        {
+          id: 1,
+          name: "Ryan",
+          level: 1
+        }
+      ]
+    };
   }
-  handleOnClick = (event) => {
+  incrementResident = (event) => {
     event.preventDefault();
-    this.setState({level: this.state.level + 1});
-  }
+    const id = event.target.id;
+    const resident = this.state.residents[id];
+    resident.level += 1;
+    const newResidents = this.state.residents;
+    newResidents[id] = resident;
+    this.setState({residents: newResidents});
+  };
+
+  renderResidents = (handleOnClick) => {
+    return this.state.residents.map((resident) => {
+      return <ResidentProfile incrementResident={this.incrementResident} resident={resident} />;
+    })
+  };
   render() {
-    return <div className="container">
+    return (
+      <div className="container">
         <div className="row">
-          <ResidentProfile name={this.state.name} level={this.state.level} />
+          {this.renderResidents()}
         </div>
-        <div className="row">
-          <button onClick={this.handleOnClick}>Up Level</button>
-        </div>
-      </div>;
+      </div>
+    );
   }
 }
 export default App;
